@@ -15,7 +15,7 @@ sequelize.authenticate().then(function(){
     console.log('Falha ao conectar: ' + e)
 })
 
-const agendamentos = sequelize.define('agendamentos',{
+const Agendamento = sequelize.define('agendamentos',{
     nome:{
         type: Sequelize.STRING
     },
@@ -36,17 +36,6 @@ const agendamentos = sequelize.define('agendamentos',{
     }
 })
 
-agendamentos.sync()
+Agendamento.sync()
 
-var create = function(nome, endereco, bairro, cep, cidade, estado){
-    agendamentos.create({
-        nome: nome,
-        endereco: endereco,
-        bairro: bairro,
-        cep: cep,
-        cidade: cidade,
-        estado: estado,
-    })
-}
-
-module.exports = create
+module.exports = Agendamento
