@@ -38,75 +38,83 @@ app.get("/pesquisar/agendamento", (req, res) => {
     res.sendFile(__dirname + '/pesquisar-agendamento.html')
 })
 
-app.post("/pesquisar/agendamento", async (req, res) => {
+app.get("/pesquisar", async (req, res) => {
     try {
-        const {nome} = req.body
+        const {nome} = req.query
 
         const agendamento = await Agendamento.findOne({
             where: { nome: nome } 
         })
 
-        res.send(`
-            <!DOCTYPE html>
-            <html lang="pt-br">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Editar - Agendamento</title>
-            </head>
-            <body>
-                <h1>Editar - Produto</h1>
-                <form action="/editar/agendamento" method="POST">
-                    <label for="id">ID</label><br>
-                    <input type="text" name="id" id="id" value="` + agendamento.id + `" required readonly>    
-                    
-                    <br>
-                    <br>
+        if(!agendamento){
+            res.send('<h1>Agendamento Não Encontrado!</h1> <br><br> <a href="/">Home</a>')
+        }else{
+            res.send(`
+                <!DOCTYPE html>
+                <html lang="pt-br">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Editar - Agendamento</title>
+                </head>
+                <body>
+                    <h1>Editar - Produto</h1>
+                    <a href="/"><h3>Home</h3></a>
 
-                    <label for="nome">Nome</label><br>
-                    <input type="text" name="nome" id="nome" value="` + agendamento.nome + `" required>
-            
-                    <br>
-                    <br>
-            
-                    <label for="cep">CEP</label><br>
-                    <input type="text" name="cep" id="cep"  value="` + agendamento.cep + `" required>
-            
-                    <br>
-                    <br>
-            
-                    <label for="endereco">Endereco</label><br>
-                    <input type="text" name="endereco" id="endereco"  value="` + agendamento.endereco + `" readonly required>
-            
-                    <br>
-                    <br>
-            
-                    <label for="bairro">Bairro</label><br>
-                    <input type="text" name="bairro" id="bairro"  value="` + agendamento.bairro + `" readonly required>
-            
-                    <br>
-                    <br>
-            
-                    <label for="cidade">Cidade</label><br>
-                    <input type="text" name="cidade" id="cidade"  value="` + agendamento.cidade + `" readonly  required>
-            
-                    <br>
-                    <br>
-            
-                    <label for="estado">Estado</label><br>
-                    <input type="text" name="estado" id="estado"  value="` + agendamento.estado + `" readonly  required>
-            
-                    <br>
-                    <br>
-            
-                    <button type="submit">Enviar<button>
-                </form>
-            
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                <script src="../js/script.js"></script>
-            </body>
-            </html>
-        `)
+                    <form action="/editar/agendamento" method="POST">
+                        <label for="id">ID</label><br>
+                        <input type="text" name="id" id="id" value="` + agendamento.id + `" required readonly>    
+                        
+                        <br>
+                        <br>
+
+                        <label for="nome">Nome</label><br>
+                        <input type="text" name="nome" id="nome" value="` + agendamento.nome + `" required>
+                
+                        <br>
+                        <br>
+                
+                        <label for="cep">CEP</label><br>
+                        <input type="text" name="cep" id="cep"  value="` + agendamento.cep + `" required>
+                
+                        <br>
+                        <br>
+                
+                        <label for="endereco">Endereco</label><br>
+                        <input type="text" name="endereco" id="endereco"  value="` + agendamento.endereco + `" readonly required>
+                
+                        <br>
+                        <br>
+                
+                        <label for="bairro">Bairro</label><br>
+                        <input type="text" name="bairro" id="bairro"  value="` + agendamento.bairro + `" readonly required>
+                
+                        <br>
+                        <br>
+                
+                        <label for="cidade">Cidade</label><br>
+                        <input type="text" name="cidade" id="cidade"  value="` + agendamento.cidade + `" readonly  required>
+                
+                        <br>
+                        <br>
+                
+                        <label for="estado">Estado</label><br>
+                        <input type="text" name="estado" id="estado"  value="` + agendamento.estado + `" readonly  required>
+                
+                        <br>
+                        <br>
+                
+                        <button type="submit">Enviar<button>
+                    </form>
+                
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script src="../js/script.js"></script>
+                </body>
+                </html>
+            `)
+        }
+
+        
     }catch(error){
         res.status(400).json({ error: error.message });
     }
@@ -129,6 +137,16 @@ app.get("/listar/agendamentos", async (req, res) => {
                     <td>` + element.bairro + `</td>
                     <td>` + element.cidade + `</td>
                     <td>` + element.estado + `</td>
+                    <td>
+                        <form action="/deletar/agendamento/` + element.id + `" method="POST">
+                            <button type="button">
+                                <a href="/pesquisar?nome=` + element.nome + `">Editar</a>
+                            </button>    
+                            <button type="submit">
+                                Deletar
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             `
         });
@@ -144,6 +162,8 @@ app.get("/listar/agendamentos", async (req, res) => {
             </head>
             <body>
                 <h1>Listar - Agendamentos</h1>
+                <a href="/"><h3>Home</h3></a>
+
                 <table border="1">
                     <thead>
                         <th>ID</th>
@@ -153,6 +173,7 @@ app.get("/listar/agendamentos", async (req, res) => {
                         <th>Bairro</th>
                         <th>Cidade</th>
                         <th>Estado</th>
+                        <th>Ação</th>
                     </thead>
                     <tbody>
                         `
@@ -185,11 +206,15 @@ app.post("/editar/agendamento", async (req, res) => {
 
 //DELETE
 app.post("/deletar/agendamento/:id", async (req, res) => {
-    const agendamento = await Agendamento.findByPk(req.params.id)
+    const agendamento = await Agendamento.findByPk(req.params.id);
 
-    agendamento.destroy()
+    if(!agendamento){
+        res.send('<h1>Agendamento Não Encontrado!</h1> <br><br> <a href="/">Home</a>')
+    }else{
+        res.send('<h1>Agendamento Excluído!</h1> <br><br> <a href="/">Home</a>')
+    }
 
-    res.redirect('/listar/agendamentos');
+    agendamento.destroy();
 })
 
 
