@@ -1,7 +1,7 @@
 //IMPORTS
 const express = require('express')
 const bodyParser = require('body-parser')
-var Agendamento = require('./banco.js')
+var Agendamento = require('./server/banco.js')
 
 //Inicia os imports
 const app = express()
@@ -17,13 +17,13 @@ app.use(bodyParser.json())
 //ROTAS
 //Página Inicial
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + '/index.html')
+    res.sendFile(__dirname + '/views/index.html')
 })
 
 
 //CREATE
 app.get("/cadastrar/agendamento", (req, res) => {
-    res.sendFile(__dirname + '/cadastrar-agendamento.html')
+    res.sendFile(__dirname + '/views/cadastrar-agendamento.html')
 })
 
 app.post("/cadastrar/agendamento", async (req, res) => {
@@ -35,7 +35,7 @@ app.post("/cadastrar/agendamento", async (req, res) => {
 
 //READ
 app.get("/pesquisar/agendamento", (req, res) => {
-    res.sendFile(__dirname + '/pesquisar-agendamento.html')
+    res.sendFile(__dirname + '/views/pesquisar-agendamento.html')
 })
 
 app.get("/pesquisar", async (req, res) => {
