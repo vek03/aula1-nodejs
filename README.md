@@ -1,6 +1,8 @@
-npm i express --save
-npm i sequelize --save
-npm i mysql2 --save
+Iniciar novo projeto:
+- npm i express --save
+- npm i sequelize --save
+- npm i mysql2 --save
 
-npm i
-node app.js
+Rodar Pronto:
+- npm i
+- node app.js
